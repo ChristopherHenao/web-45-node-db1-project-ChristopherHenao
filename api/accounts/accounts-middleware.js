@@ -1,4 +1,5 @@
 const Accounts = require('./accounts-model')
+const db = require('../../data/db-config')
 
 exports.checkAccountPayload = (req, res, next) => {
   const { name, budget } = req.body
@@ -28,8 +29,19 @@ exports.checkAccountPayload = (req, res, next) => {
   }
 }
 
-exports.checkAccountNameUnique = (req, res, next) => {
-  // DO YOUR MAGIC
+exports.checkAccountNameUnique = async (req, res, next) => {
+  const existing = await db('accounts').where('name', req.body.name.trim()).first()
+  try {
+    if (existing) {
+      next({ status: 400, message: "that name is taken"})
+    }
+    else {
+      next()
+    }
+  }
+  catch (error) {
+    next(error)
+  }
 }
 
 exports.checkAccountId = async (req, res, next) => {
