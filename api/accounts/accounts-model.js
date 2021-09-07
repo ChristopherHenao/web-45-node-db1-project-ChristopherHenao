@@ -5,7 +5,7 @@ const getAll = () => {
 }
 
 const getById = id => {
-  return 'get by id wired'
+  return db('accounts').where('id', id).first()
 }
 
 const create = account => {
