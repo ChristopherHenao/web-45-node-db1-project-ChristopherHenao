@@ -31,11 +31,10 @@ router.post('/', checkAccountPayload, async (req, res, next) => {
   }
 })
 
-router.put('/:id', async (req, res, next) => {
-  const data = await Accounts.updateById(req.params.id, req.body)
+router.put('/:id', checkAccountId, checkAccountPayload, async (req, res, next) => {
+  const updatedAccount = await Accounts.updateById(req.params.id, {name: req.name, budget: req.body.budget})
   try {
-    console.log(data)
-    res.json(data)
+    res.json(updatedAccount)
   }
   catch (error) {
     next(error)
